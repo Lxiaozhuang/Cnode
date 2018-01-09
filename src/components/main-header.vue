@@ -7,24 +7,31 @@
             <Col :xxl="20" :xl="19" :lg="19" :md="18" :xs="0" :sm="0">
                 <div style="border-left:1px solid #ccc;height:58px;float:left;width:0"></div>
                 <Menu mode="horizontal" :theme="theme1" active-name="1" style="float:left">
-                    <MenuItem name="1">
-                        <Icon type="home" />
-                        主页
-                    </MenuItem>
-                    <MenuItem name="2">
-                        <Icon type="ios-book"/> 
-                        教程
-                    </MenuItem>
-                    <MenuItem name="4">
-                        <Icon type="ios-information"/>
-                        关于
-                    </MenuItem>
+                    <Menu-item name="1">
+                        <router-link to='/'>
+                            <Icon type="home" />
+                            主页
+                        </router-link>
+                    </Menu-item>
+                    <Menu-item name="2">
+                        <router-link to='/'>
+                            <Icon type="ios-book"/> 
+                            教程
+                        </router-link>
+                    </Menu-item>
+                    <Menu-item name="3">
+                        <router-link to='/'>
+                            <Icon type="ios-information"/>
+                            关于
+                        </router-link>
+                    </Menu-item>
                  </Menu>
                  <div style="float:right;padding-right:90px;line-height:58px">
-                     <!-- <Button style="marginRight: 2px"><Icon type="user" />登陆</Button>
-                    <Button style="marginRight: 2px"><Icon type="flag" />注册</Button> -->
-                    
-                    <Dropdown style="margin-left: 20px">
+                     <router-link to="/login" style="marginRight: 2px" @click="buttonLogin"><Icon type="user" />登陆</router-link>
+                    <Button style="marginRight: 2px"><Icon type="flag" />注册</Button>
+                 </div>
+                 <!-- <div v-else style="float:right;padding-right:90px;line-height:58px">
+                     <Dropdown style="margin-left: 20px">
                         <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">Lxz</span>
                         <Dropdown-menu slot="list">
                             <Dropdown-item>发布话题</Dropdown-item>
@@ -32,7 +39,7 @@
                             <Dropdown-item>退出登陆</Dropdown-item>
                         </Dropdown-menu>
                     </Dropdown>
-                 </div>
+                 </div> -->
             </Col>
         </Row>
         <Row style="position: absolute; right: 50px; top: 16px;">
@@ -58,12 +65,21 @@
 export default {
     data () {
         return {
-            theme1: 'light'
+            theme1: 'light',
+            
+        }
+    },
+    methods:{
+        buttonLogin(){
+            
         }
     }
 }
 </script>
 
 <style>
+a{
+    color: #333
+}
 
 </style>

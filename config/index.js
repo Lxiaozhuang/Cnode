@@ -10,7 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: 'https://cnodejs.org',
+        changeOrigin: true,
+        secure: false,
+        headers: {
+          Referer: 'https://cnodejs.org'
+        }
+      }
+    },// 后台给的接口
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
