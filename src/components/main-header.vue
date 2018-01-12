@@ -2,7 +2,7 @@
     <div style="box-shadow:2px 2px 5px #eee;position:relative">
         <Row>
             <Col :xxl="4" :xl="5" :lg="5" :md="6" :xs="24" :sm="24">
-                <h2 style="text-align:center;height:58px;line-height:58px">Lxz</h2>
+                <h2 style="text-align:center;height:58px;line-height:58px">CNode</h2>
             </Col>
             <Col :xxl="20" :xl="19" :lg="19" :md="18" :xs="0" :sm="0">
                 <div style="border-left:1px solid #ccc;height:58px;float:left;width:0"></div>
@@ -26,20 +26,24 @@
                         </router-link>
                     </Menu-item>
                  </Menu>
-                 <div style="float:right;padding-right:90px;line-height:58px">
-                     <router-link to="/login" style="marginRight: 2px" @click="buttonLogin"><Icon type="user" />登陆</router-link>
-                    <Button style="marginRight: 2px"><Icon type="flag" />注册</Button>
+                 <div style="float:right;padding-right:90px;line-height:58px" v-if="!this.$store.state.userInfo.userId">
+                     <router-link to="/login" style="marginRight: 2px"><Icon type="user" />登陆</router-link>
+                    
                  </div>
-                 <!-- <div v-else style="float:right;padding-right:90px;line-height:58px">
+                 <div v-else style="float:right;padding-right:90px;line-height:58px">
                      <Dropdown style="margin-left: 20px">
-                        <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">Lxz</span>
+                        <router-link to="/login">
+                            <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">Lxz</span>
+                        </router-link>
                         <Dropdown-menu slot="list">
                             <Dropdown-item>发布话题</Dropdown-item>
                             <Dropdown-item>用户中心</Dropdown-item>
-                            <Dropdown-item>退出登陆</Dropdown-item>
+                            <Dropdown-item>
+                                <div @click="logout">退出登陆</div>
+                            </Dropdown-item>
                         </Dropdown-menu>
                     </Dropdown>
-                 </div> -->
+                 </div>
             </Col>
         </Row>
         <Row style="position: absolute; right: 50px; top: 16px;">
@@ -52,7 +56,11 @@
                     <Dropdown-item>主页</Dropdown-item>
                     <Dropdown-item>教程</Dropdown-item>
                     <Dropdown-item>关于</Dropdown-item>
-                    <Dropdown-item><Avatar icon="person" /><span style="margin-left:10px;font-size:18px">Lxz</span></Dropdown-item>
+                    <Dropdown-item>
+                        <router-link to="/login">
+                            <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">Lxz</span>
+                        </router-link>
+                    </Dropdown-item>
                     
                 </Dropdown-menu>
             </Dropdown>
@@ -62,16 +70,26 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data () {
         return {
             theme1: 'light',
-            
         }
     },
     methods:{
-        buttonLogin(){
-            
+        logout(){
+            localStorage.clear()
+          window.location.reload()
+        }
+    },
+    beforeCreate(){
+        console.log(this.$store.state)
+        if(localStorage.getItem("data")){
+            this.$store.state.userInfo=JSON.parse(localStorage.data)
+            axios.get('https://cnodejs.org/api/v1/user/' + this.$store.state.userInfo.loginname).then((response) => {
+              this.userContent = response.data.data
+            })
         }
     }
 }

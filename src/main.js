@@ -10,7 +10,9 @@ import 'iview/dist/styles/iview.css'
 Vue.use(iView)
 
 Vue.config.productionTip = false
-
+if (sessionStorage.user) {
+  store.dispatch('setUserInfo', JSON.parse(sessionStorage.user))
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -11,7 +11,7 @@ let store=new Vuex.Store({
         pageNum:1,
         tab:'all',
         loading:false,
-        id:'5a2403226190c8912ebaceeb'
+        userInfo:{}
     },
     mutations:{
         changeLoading(state,payload){
@@ -46,6 +46,9 @@ let store=new Vuex.Store({
             state.id=payload.id
             state.list=payload.list
             state.loading=payload.loading
+        },
+        setUserInfo(state, payload) {
+            state.userInfo = payload.userInfo
         }
     },
     actions :{
@@ -63,17 +66,18 @@ let store=new Vuex.Store({
             })
            },1000)
         },
-        listAction({commit},payload={id:'5a2403226190c8912ebaceeb'}){
+        listAction({commit},payload){
             setTimeout(()=>{
                 Axios.get('/api/v1/topic/'+payload.id)
                 .then((res)=>{
-                    // console.log(res.data.data)
-                    
                     commit('infoChange', { list: res.data.data })
                     commit('changeLoading',{ loading: true })
                 })
             })
-        }
+        },
+        setUserInfo ({commit}, user) {
+            commit('setUserInfo', user)
+          }
     }
 })
 export default store;

@@ -21,12 +21,12 @@
       <div v-html="this.$store.state.list.content"></div>
       <div class="panel">
         <div class="header"><span>{{this.$store.state.list.reply_count}}回复</span></div>
-        <div class="reply-input">
-          <input type="text" placeholder="请输入回复内容">
-          <button type="button" >回复</button>
+        <div class="reply-input" @click="inpInfo">
+          <textarea v-model="commonText"></textarea>
+          <button type="button" @click="submitContent">发表</button>
         </div>
         <ul> 
-          <li v-for="item in this.$store.state.list.replies"  class="cell cleanFix">
+          <li v-for="(item,index) in this.$store.state.list.replies"  class="cell cleanFix">
             <div class="content-author">
               <div class="demo-avatar">
                   <Avatar :src="item.author.avatar_url" />
@@ -36,12 +36,21 @@
                   <span>{{item.index}}</span>
                   <span>{{formatDate(item.create_at)}}</span>
               </div>
+              <div class="rightInfo" @click="submitInfo(index)">
+                <span>回复</span>
+              </div>
               <div class="action">
-                <span><i><Icon type="thumbsup"></Icon></i>{{item.ups.length}}</span>
+                <span @click="ups(item.id)">
+                  <i v-if="!iconShow"><Icon type="ios-heart-outline"></Icon></i>
+                  <i v-else><Icon type="ios-heart"></Icon></i>{{item.ups.length}}</span>
               </div>
             </div>
-            <div class="content-reoly" v-html="item.content"></div>
-            <div></div>
+            <div class="content-reoly" v-html="item.content">
+            </div>
+            <div class="reply-input" v-show="currentNum===index">
+              <textarea v-model="replyText"></textarea>
+              <button type="button" @click="submitOneInfo(item.id,item.author.loginname)">回复</button>
+            </div>
           </li>
         </ul>
       </div>
@@ -51,9 +60,18 @@
 </template>
 
 <script>
-import Loding from '../loding'
+import Loding from '../loding';
+import axios from 'axios'
 export default {
-  
+  data(){
+    return {
+      iconShow:false,
+      commonText:'',
+      currentNum:'',
+      replyText:'',
+      id:this.$route.params.id
+    }
+  },
   components:{
     Loding,
   },
@@ -62,10 +80,57 @@ export default {
           if(date){
             return  date.split('T').join(' ').split('.')[0]
           }
+        },
+        //发表品论
+        submitContent(){
+          axios.post(`/api/v1/topic/${this.id}/replies`,{
+            accesstoken: this.$store.state.userInfo.token,
+            content: this.commonText,
+          }).then((response)=>{
+            if (response.data.success === true){
+              alert('评论成功')
+              this.commentText = '';
+            }
+          })
+        },
+        submitInfo(index){
+          this.currentNum=index;
+        },
+        inpInfo(){
+          this.currentNum='';
+        },
+        //回复其他评论
+        submitOneInfo(id,name){
+          axios.post(`/api/v1/topic/${this.id}/replies`,{
+            accesstoken: this.$store.state.userInfo.token,
+            content:'@'+name+':'+ this.replyText,
+            reply_id:id
+          }).then((response)=>{
+            console.log(response)
+            if (response.data.success === true){
+              alert('回复成功')
+              this.replyText = '';
+            }
+          })
+        },
+        //点赞
+        ups(upId){
+          console.log(upId)
+          axios.post('/api/v1/reply/'+'upId'+'/ups',{
+            accesstoken: this.$store.state.userInfo.token,
+          }).then((response)=>{
+            if(response.data.data){
+              alert('点赞成功')
+              this.iconShow=true
+            }
+          })
         }
     },
-    mounted(){
+    
+    beforeCreate(){
       this.$store.dispatch('listAction',{id:this.$router.currentRoute.params.id})
+      // console.log(JSON.stringify(this.$route.params.id))
+      console.log(this.$store.state)
       
   }
 }
@@ -140,7 +205,13 @@ p{
     font-size: 15px;
   }
   .action i{
-    margin-right: 6px
+    margin-right: 2px
+  }
+  .rightInfo{
+    float: right;
+    margin: 0 6px;
+    font-size:14px;
+     cursor: pointer;
   }
   .cleanFix:after{
     display:block;
@@ -149,20 +220,22 @@ p{
   }
   .reply-input{
     width: 100%;
-    height: 50px;
+    /* height: 50px; */
     background-color: white;
     margin-bottom: 10px;
     padding-left: 10px;
     padding-top: 5px;
-    display: flex;
+    display: block;
+    /* display: flex; */
     -webkit-box-pack: center;
-    justify-content: center;
+    /* justify-content: center; */
     -webkit-box-align: center;
-    align-items: center;
+    height: 200px;
+    /* align-items: center; */
   }
-  .reply-input input{
-    width: 80%;
-    height: 40px;
+  .reply-input textarea{
+    width: 100%;
+    height: 160px;
     font-size: 1.3rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     margin-right: 10px;
@@ -170,10 +243,16 @@ p{
     padding-right: 5px;
   }
   .reply-input button {
-        font-size: 1.3rem;
+    font-size: 16px;
     padding: 3px 5px;
     background-color: #2196f3;
     color: white;
     border-radius: 3px;
+    border: none;
+    float: right;
+    margin-right: 15px
+  }
+  .reply-input button:focus{
+    outline: none;
   }
 </style>
