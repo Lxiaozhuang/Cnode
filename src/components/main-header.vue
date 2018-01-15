@@ -14,9 +14,9 @@
                         </router-link>
                     </Menu-item>
                     <Menu-item name="2">
-                        <router-link to='/'>
+                        <router-link to='/newTopic'>
                             <Icon type="ios-book"/> 
-                            教程
+                            发布
                         </router-link>
                     </Menu-item>
                     <Menu-item name="3">
@@ -28,12 +28,11 @@
                  </Menu>
                  <div style="float:right;padding-right:90px;line-height:58px" v-if="!this.$store.state.userInfo.userId">
                      <router-link to="/login" style="marginRight: 2px"><Icon type="user" />登陆</router-link>
-                    
                  </div>
                  <div v-else style="float:right;padding-right:90px;line-height:58px">
                      <Dropdown style="margin-left: 20px">
                         <router-link to="/login">
-                            <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">Lxz</span>
+                            <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">{{this.$store.state.userInfo.loginname}}</span>
                         </router-link>
                         <Dropdown-menu slot="list">
                             <Dropdown-item>发布话题</Dropdown-item>
@@ -54,7 +53,9 @@
                 </Button>
                 <Dropdown-menu slot="list" style="text-align:center">
                     <Dropdown-item>主页</Dropdown-item>
-                    <Dropdown-item>教程</Dropdown-item>
+                    <Dropdown-item>
+                        <router-link to='/newTopic'>发布</router-link>
+                    </Dropdown-item>
                     <Dropdown-item>关于</Dropdown-item>
                     <Dropdown-item>
                         <router-link to="/login">
@@ -75,6 +76,7 @@ export default {
     data () {
         return {
             theme1: 'light',
+            userContent:'',
         }
     },
     methods:{
@@ -84,7 +86,6 @@ export default {
         }
     },
     beforeCreate(){
-        console.log(this.$store.state)
         if(localStorage.getItem("data")){
             this.$store.state.userInfo=JSON.parse(localStorage.data)
             axios.get('https://cnodejs.org/api/v1/user/' + this.$store.state.userInfo.loginname).then((response) => {

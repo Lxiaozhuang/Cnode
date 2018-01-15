@@ -81,7 +81,7 @@ export default {
             return  date.split('T').join(' ').split('.')[0]
           }
         },
-        //发表品论
+        //发表评论
         submitContent(){
           axios.post(`/api/v1/topic/${this.id}/replies`,{
             accesstoken: this.$store.state.userInfo.token,
@@ -89,7 +89,7 @@ export default {
           }).then((response)=>{
             if (response.data.success === true){
               alert('评论成功')
-              this.commentText = '';
+              this.commonText = '';
             }
           })
         },
@@ -106,7 +106,6 @@ export default {
             content:'@'+name+':'+ this.replyText,
             reply_id:id
           }).then((response)=>{
-            console.log(response)
             if (response.data.success === true){
               alert('回复成功')
               this.replyText = '';
@@ -116,12 +115,13 @@ export default {
         //点赞
         ups(upId){
           console.log(upId)
-          axios.post('/api/v1/reply/'+'upId'+'/ups',{
+          axios.post(`/api/v1/reply/${upId}/ups`,{
             accesstoken: this.$store.state.userInfo.token,
           }).then((response)=>{
-            if(response.data.data){
+            console.log(response)
+            if(response.data.success){
               alert('点赞成功')
-              this.iconShow=true
+              
             }
           })
         }
@@ -130,7 +130,6 @@ export default {
     beforeCreate(){
       this.$store.dispatch('listAction',{id:this.$router.currentRoute.params.id})
       // console.log(JSON.stringify(this.$route.params.id))
-      console.log(this.$store.state)
       
   }
 }

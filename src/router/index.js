@@ -5,6 +5,7 @@ Vue.use(Router)
 import TopicNav from '@/components/topic/topic-nav'
 import Info from '@/components/topic/info'
 import Login from '@/components/login/login'
+import newTopic from '@/components/topic/newTopic'
 const router=new Router({
     mode:'history',
     routes:[
@@ -20,6 +21,10 @@ const router=new Router({
         {
             path:'/login',
             component:Login
+        },
+        {
+            path:'/newTopic',
+            component:newTopic
         }
     ]
 })
