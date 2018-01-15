@@ -96,12 +96,14 @@ export default {
       talkA(value){
           axios.get('/api/v1/user/' + this.$store.state.userInfo.loginname).then((response)=>{
               console.log(response)
+              this.isActive=value
               this.articleItems=response.data.data.recent_topics
           })
       },
       talkB(value){
           axios.get('/api/v1/user/' + this.$store.state.userInfo.loginname).then((response)=>{
               console.log(response)
+              this.isActive=value
               this.articleItems=response.data.data.recent_replies
           })
       },
@@ -109,6 +111,7 @@ export default {
       talkC(value){
           axios.get('/api/v1/topic_collect/' + this.$store.state.userInfo.loginname).then((response)=>{
               console.log(response)
+              this.isActive=value
               this.articleItems=response.data.data
           })
       },
