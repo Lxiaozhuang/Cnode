@@ -26,7 +26,7 @@
                         </router-link>
                     </Menu-item>
                  </Menu>
-                 <div style="float:right;padding-right:90px;line-height:58px" v-if="!this.$store.state.userInfo.userId">
+                 <div style="float:right;padding-right:90px;line-height:58px" v-if="!this.$store.state.userInfo">
                      <router-link to="/login" style="marginRight: 2px"><Icon type="user" />登陆</router-link>
                  </div>
                  <div v-else style="float:right;padding-right:90px;line-height:58px">
@@ -35,10 +35,16 @@
                             <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">{{this.$store.state.userInfo.loginname}}</span>
                         </router-link>
                         <Dropdown-menu slot="list">
-                            <Dropdown-item>发布话题</Dropdown-item>
-                            <Dropdown-item>用户中心</Dropdown-item>
                             <Dropdown-item>
+                              <router-link to="/newTopic">发布话题</router-link>
+                            </Dropdown-item>
+                            <Dropdown-item>
+                                <router-link to="/login">用户中心</router-link>
+                            </Dropdown-item>
+                            <Dropdown-item>
+                              <router-link to="/login">
                                 <div @click="logout">退出登陆</div>
+                              </router-link>
                             </Dropdown-item>
                         </Dropdown-menu>
                     </Dropdown>
@@ -89,7 +95,7 @@ export default {
         if(localStorage.getItem("data")){
             this.$store.state.userInfo=JSON.parse(localStorage.data)
             axios.get('https://cnodejs.org/api/v1/user/' + this.$store.state.userInfo.loginname).then((response) => {
-              this.userContent = response.data.data
+              this.userContent = response.data.data 
             })
         }
     }

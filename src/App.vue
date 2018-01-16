@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import mainHeader from './components/main-header'
 import mainFooter from './components/main-footer'
 import topicNav from './components/topic/topic-nav'
@@ -18,7 +19,15 @@ export default {
     mainHeader,
     mainFooter,
     topicNav
-  }
+  },
+  beforeCreate(){
+        if(localStorage.getItem("data")){
+            this.$store.state.userInfo=JSON.parse(localStorage.data)
+            axios.get('https://cnodejs.org/api/v1/user/' + this.$store.state.userInfo.loginname).then((response) => {
+              this.userContent = response.data.data 
+            })
+        }
+    }
 }
 </script>
 

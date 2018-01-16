@@ -90,6 +90,7 @@ export default {
             if (response.data.success === true){
               alert('评论成功')
               this.commonText = '';
+              window.parent.frames.location.reload()
             }
           })
         },
@@ -109,6 +110,7 @@ export default {
             if (response.data.success === true){
               alert('回复成功')
               this.replyText = '';
+              window.parent.frames.location.reload()
             }
           })
         },
@@ -121,7 +123,7 @@ export default {
             console.log(response)
             if(response.data.success){
               alert('点赞成功')
-              
+              window.parent.frames.location.reload()
             }
           })
         }
