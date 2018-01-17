@@ -26,7 +26,7 @@
                         </router-link>
                     </Menu-item>
                  </Menu>
-                 <div style="float:right;padding-right:90px;line-height:58px" v-if="!this.$store.state.userInfo">
+                 <div style="float:right;padding-right:90px;line-height:58px" v-if="!this.$store.state.userInfo.userId">
                      <router-link to="/login" style="marginRight: 2px"><Icon type="user" />登陆</router-link>
                  </div>
                  <div v-else style="float:right;padding-right:90px;line-height:58px">

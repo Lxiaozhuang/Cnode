@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div class="inner" v-if="!this.$store.state.userInfo">
+      <div class="inner" v-if="!this.$store.state.userInfo.userId">
     <div class="use">
         <span>token</span>
         <input type="password" v-model="userToken">
@@ -9,7 +9,7 @@
         <button @click="login">登录</button>
     </div>
   </div>
-  <div class="content" v-if="this.$store.state.userInfo">
+  <div class="content" v-if="this.$store.state.userInfo.userId">
     <input class="logout" title="退出" type="button" value="退出" @click="logout">
     <div class="fistContent">
         <div class="avator">
