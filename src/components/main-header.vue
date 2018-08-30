@@ -20,7 +20,7 @@
                         </router-link>
                     </Menu-item>
                     <Menu-item name="3">
-                        <router-link to='/'>
+                        <router-link to='/about'>
                             <Icon type="ios-information"/>
                             关于
                         </router-link>
@@ -58,11 +58,16 @@
                     <Icon type="navicon-round"></Icon>
                 </Button>
                 <Dropdown-menu slot="list" style="text-align:center">
-                    <Dropdown-item>主页</Dropdown-item>
+                    <Dropdown-item>
+                        <router-link to='/'>主页</router-link>
+                        
+                    </Dropdown-item>
                     <Dropdown-item>
                         <router-link to='/newTopic'>发布</router-link>
                     </Dropdown-item>
-                    <Dropdown-item>关于</Dropdown-item>
+                    <Dropdown-item>
+                        <router-link to='/about'>关于</router-link>
+                    </Dropdown-item>
                     <Dropdown-item>
                         <router-link to="/login">
                             <Avatar icon="person" /><span style="margin-left:10px;font-size:18px">Lxz</span>

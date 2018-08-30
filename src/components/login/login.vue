@@ -43,7 +43,7 @@
                 <h2><router-link :to="'/topic/'+article.id" :title="article.title">{{article.title}}</router-link></h2>
               </div>
             </div>
-            <div v-if="articleItems.length === 0" class="userTips">
+            <div v-if="articleItems.length == 0" class="userTips">
               <h2>暂无内容哦。。。🙃</h2>
             </div>
           </div>
@@ -69,7 +69,8 @@ export default {
             alert(111)
             return false
           }
-        let _this = this;
+          
+          let _this = this;
           axios.post('/api/v1/accesstoken', {
             accesstoken: _this.userToken
           }).then((response) =>{
@@ -85,13 +86,20 @@ export default {
               _this.$store.state.userInfo=user
               //再次获取用户的信息 储存到userContent中
               axios.get('/api/v1/user/' + _this.$store.state.userInfo.loginname).then((response) => {
-              _this.userContent = response.data.data
+              _this.userContent = response.data.data;
+
+              axios.get('/api/v1/user/' + this.$store.state.userInfo.loginname).then((response)=>{
+                console.log(response)
+                this.isActive='a'
+                this.articleItems=response.data.data.recent_topics
+            })
               
             })
           }).catch(()=>{
               alert('token码不正确')
           })
       },
+      
       //获取用户详情 recent_topics储存的是用户的发布的主题，recent_replies是储存的是参与的话题
       talkA(value){
           axios.get('/api/v1/user/' + this.$store.state.userInfo.loginname).then((response)=>{
@@ -131,7 +139,14 @@ export default {
         if(localStorage.getItem("data")){
             this.$store.state.userInfo=JSON.parse(localStorage.data)
             axios.get('https://cnodejs.org/api/v1/user/' + this.$store.state.userInfo.loginname).then((response) => {
-              this.userContent = response.data.data
+              this.userContent = response.data.data;
+              console.log(this.userContent,'1111');
+
+              axios.get('/api/v1/user/' + this.$store.state.userInfo.loginname).then((response)=>{
+                  console.log(response)
+                  this.isActive= 'a'
+                  this.articleItems=response.data.data.recent_topics
+              })
             })
         }
     }
@@ -240,7 +255,7 @@ export default {
       width: 100%;
       box-sizing: border-box;
       padding: 0 100px;
-        height: 200px;
+      min-height: 200px;
   }
   nav ul{
     list-style: none;
